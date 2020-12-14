@@ -30,7 +30,7 @@ void Naray2f::normalize( const IntervalF& newInterval )
             double newValue = IntervalF::mapValue(oldValue, oldInterval, newInterval);
             set(newValue, r, c);
 
-            cout << oldValue << " >> " << newValue << endl;
+            //cout << oldValue << " >> " << newValue << endl;
         }
     }
 }

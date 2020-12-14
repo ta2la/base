@@ -15,6 +15,7 @@
 //=============================================================================
 #include <T2lNaray2vec.h>
 #include <iostream>
+#include <random>
 
 using namespace T2l;
 using namespace std;
@@ -25,7 +26,7 @@ Naray2vec::Naray2vec( int d0, int d1 ) : Naray2( d0, d1 )
 }
 
 //=============================================================================
-Point2I Naray2vec::calculateBmatch(ColumnF& c)
+Point2I Naray2vec::calculateBmatch(const ColumnF& c)
 {
     int X = 0;
     int Y = 0;
@@ -48,12 +49,75 @@ Point2I Naray2vec::calculateBmatch(ColumnF& c)
 }
 
 //=============================================================================
+Point2I Naray2vec::calculateBmatch(const ColumnF& cc, const ColumnF& minima, const ColumnF& maxima, const ColumnF& importance)
+{
+    int X = 0;
+    int Y = 0;
+
+    ColumnF c   = normalize(cc, 100, minima, maxima);
+
+    ColumnF c00 = normalize(get(0, 0), 100, minima, maxima);
+    double diff = ColumnF::diffSqImportance(c00, c, importance);
+
+    for (int ix = 0; ix < countX(); ix++) {
+        for (int iy = 0; iy < countY(); iy++) {
+
+            ColumnF cxy = normalize(get(ix, iy), 100, minima, maxima);
+            double erri = ColumnF::diffSqImportance(cxy, c, importance);
+            if (erri > diff) continue;
+
+            X = ix;
+            Y = iy;
+            diff = erri;
+        }
+    }
+
+    return Point2I(X, Y);
+}
+
+//=============================================================================
 double Naray2vec::calculateDistance(const Point2I& p0, const Point2I& p1)
 {
     double dx = p0.x() -p1.x();
     double dy = p0.y() -p1.y();
 
     return sqrt(dx*dx+dy*dy);
+}
+
+//=============================================================================
+double Naray2vec::normalize(double value, double range, double minima, double maxima)
+{
+    return range*(value-minima)/(maxima-minima);
+}
+
+//=============================================================================
+ColumnF Naray2vec::normalize(const ColumnF& column, double range, const ColumnF& minima, const ColumnF& maxima)
+{
+    ColumnF result(column.count());
+
+    for (int i = 0; i < column.count(); i++) {
+        result.get(i) = normalize(column.get(i), range, minima.get(i), maxima.get(i));
+    }
+
+    return result;
+}
+
+//=============================================================================
+void Naray2vec::initializeRandom(const ColumnF min, const ColumnF max)
+{
+    random_device rd;
+    mt19937 gen(rd());
+
+    for (int ix = 0; ix < countX(); ix++) {
+        for (int iy = 0; iy < countY(); iy++) {
+            ColumnF c(get(ix,iy).count());
+
+            for ( int i = 0; i < c.count(); i++) {
+                uniform_real_distribution<> dis(min.get(i), max.get(i));
+                get(ix, iy).get(i) = dis(gen);
+            }
+        }
+    }
 }
 
 //=============================================================================

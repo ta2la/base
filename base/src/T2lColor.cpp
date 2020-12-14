@@ -79,7 +79,7 @@ Color Color::read(const char* color)
         istringstream f(color);
         string s;
         while (getline(f, s, ',')) {
-            cout << s << endl;
+            //cout << s << endl;
             strings.push_back(s);
         }
 

@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2015 Petr Talla. [petr.talla@gmail.com]
+// Copyright (C) 2020 Petr Talla. [petr.talla@gmail.com]
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,35 +15,34 @@
 //=============================================================================
 #pragma once
 
-#include "T2lPoint2.h"
-#include "T2lBox2.h"
+#include <T2lAttr.h>
+#include <T2lListClever.h>
 
-namespace T2l {
-
-class Component;
+namespace T2l
+{
 
 //=============================================================================
-class CanvasI {
+class AttrRecord
 //=============================================================================
+{
 public:
-// <CONSTRUCTION>
-    CanvasI() {}
-    ~CanvasI() {}
-// <METHODS>
-    virtual bool  draw(Component* c) = 0;
+//<CONSTRUCTION>
+    AttrRecord();
 
-    virtual const Box2F& bound()  const   = 0;
-    virtual double       scaleX() const   = 0;
-    virtual double       scaleY() const   = 0;
-    virtual double       scaleS() const   = 0;
-    virtual double       ppm()    const   = 0;
+    void readArguments(int argc, char *argv[]);
+//<METHODS>
+    void       attrsAdd(Attr attr) { attrs_.add(attr); }
+    int        attrsCount() { return attrs_.count(); }
+    Attr&      attrsGet(int index) { return attrs_.get(index); }
+    Attr*      attrsGet(const char* name, int index = 0);
+    const char* getValue(const char* name, const char* implicit = "", int index = 0);
+    double     getValue(const char* name, double implicit);
 
-    virtual Point2F mapRealToPaper  (const Point2F& pt) const = 0;
-    virtual Box2F   mapRealToPaper  (const Box2F& pt)   const = 0;
-    virtual Point2F mapPaperToReal  (const Point2F& pt) const = 0;
-    virtual double  mapSymbolicToReal(const double d)    const = 0;
-    virtual Point2F mapSymbolicToReal(const Point2F& pt) const = 0;
+    std::string print();
 //=============================================================================
+protected:
+//<DATA>
+    ListClever<Attr> attrs_;
 };
 
-} // namespace t2l
+}

@@ -45,14 +45,14 @@ template <class T>
 void ItemCol<T>::add(T* item )
 {
     add_child_(item);
-    List<T>::items_.append(item);
+    List<T>::items_.add(item);
 }
 
 //=============================================================================
 template <class T>
 void ItemCol<T>::remove( int index )
 {
-    T* item = List<T>::items_.at(index);
+    T* item = List<T>::items_.get(index);
     remove(item);
 }
 
@@ -62,7 +62,7 @@ void ItemCol<T>::remove( T* item )
 {
     //item->parent_ = NULL;
     set_parent_null_(item);
-    List<T>::items_.removeOne(item);
+    List<T>::items_.remove(item);
 }
 
 //=============================================================================
@@ -80,7 +80,7 @@ void ItemCol<T>::clean()
 template <class T>
 void ItemCol<T>::release_child_ ( Item* item )
 {
-    List<T>::items_.removeOne((T*)item);
+    List<T>::items_.remove((T*)item);
 }
 
 } // namespace t2l

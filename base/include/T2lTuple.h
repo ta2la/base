@@ -40,7 +40,7 @@ public:
 protected:
 //<DATA>
     std::array<T, N> x_;
-    //T x_[N]; //not safe, but possible to debug in QtCreator
+    //T x_[N]; //not safe, but possible to debug in Creator
 };
 
 typedef Tuple<int, 2> Tuple2I;

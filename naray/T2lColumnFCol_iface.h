@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2015 Petr Talla. [petr.talla@gmail.com]
+// Copyright (C) 2020 Petr Talla. [petr.talla@gmail.com]
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,35 +15,28 @@
 //=============================================================================
 #pragma once
 
-#include "T2lPoint2.h"
-#include "T2lBox2.h"
+#include "T2lColumnF.h"
 
 namespace T2l {
 
-class Component;
-
 //=============================================================================
-class CanvasI {
+class ColumnFCol_iface {
 //=============================================================================
 public:
-// <CONSTRUCTION>
-    CanvasI() {}
-    ~CanvasI() {}
-// <METHODS>
-    virtual bool  draw(Component* c) = 0;
+//<CONSTRUCTION>
+    ColumnFCol_iface() {}
+    virtual ~ColumnFCol_iface();
+//<METHODS>
+    virtual int     i_columnFCol_count() = 0;
+    virtual ColumnF i_columnFCol_get(int index) = 0;
 
-    virtual const Box2F& bound()  const   = 0;
-    virtual double       scaleX() const   = 0;
-    virtual double       scaleY() const   = 0;
-    virtual double       scaleS() const   = 0;
-    virtual double       ppm()    const   = 0;
-
-    virtual Point2F mapRealToPaper  (const Point2F& pt) const = 0;
-    virtual Box2F   mapRealToPaper  (const Box2F& pt)   const = 0;
-    virtual Point2F mapPaperToReal  (const Point2F& pt) const = 0;
-    virtual double  mapSymbolicToReal(const double d)    const = 0;
-    virtual Point2F mapSymbolicToReal(const Point2F& pt) const = 0;
+    ColumnF i_columnFCol_minima() { return i_columnFCol_minmax_(false); }
+    ColumnF i_columnFCol_maxima() { return i_columnFCol_minmax_(true); }
 //=============================================================================
+//<OVERRIDES>
+//<DATA>
+//<INTERNALS>
+    ColumnF i_columnFCol_minmax_(bool max);
 };
 
-} // namespace t2l
+} // namespace T2l

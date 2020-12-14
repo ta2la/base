@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2016 Petr Talla. [petr.talla@gmail.com]
+// Copyright (C) 2020 Petr Talla. [petr.talla@gmail.com]
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,40 +13,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-#include <T2lColumnF.h>
-#include <iostream>
+
+#include "T2lAttr.h"
 
 using namespace T2l;
 using namespace std;
 
 //=============================================================================
-double ColumnF::diffSq(const ColumnF& c1, const ColumnF& c2)
+Attr::Attr(const char* name, const char* value) :
+    name_(name),
+    value_(value)
 {
-    int count = ColumnF::countCommon(c1, c2);
-
-    double delta = 0;
-
-    for ( int i = 0; i < count; i++ ) {
-        double di = c1.get(i) - c2.get(i);
-        delta += di*di;
-    }
-
-    return delta;
 }
 
 //=============================================================================
-double ColumnF::diffSqImportance(const ColumnF& c1, const ColumnF& c2, const ColumnF& importance)
+Attr Attr::read(const char* nameValue, const char* delimiter)
 {
-    int count = ColumnF::countCommon(c1, c2);
+    string nv(nameValue);
 
-    double delta = 0;
+    const size_t last_slash_idx = nv.find(delimiter);
+    string name  = nv.substr(0, last_slash_idx);
+    string value = nv.substr(last_slash_idx+1);
 
-    for ( int i = 0; i < count; i++ ) {
-        double di = c1.get(i) - c2.get(i);
-        delta += di*di*importance.get(i);
+    int beg = 0;
+    int end = value.length()-1;
+
+    for(int i = 0; i<value.length(); i++) {
+        if (isspace(value[i])) {
+            beg++;
+        }
+        else {
+            break;
+        }
     }
 
-    return delta;
+    for(int i = value.length(); i>=0; i--) {
+        if (isspace(value[i])) {
+            end--;
+        }
+        else {
+            break;
+        }
+    }
+
+    value = value.substr(beg, end);
+
+    return Attr(name.c_str(), value.c_str());
 }
 
 //=============================================================================

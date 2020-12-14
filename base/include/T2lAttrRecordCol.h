@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2015 Petr Talla. [petr.talla@gmail.com]
+// Copyright (C) 2020 Petr Talla. [petr.talla@gmail.com]
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,35 +15,31 @@
 //=============================================================================
 #pragma once
 
-#include "T2lPoint2.h"
-#include "T2lBox2.h"
+#include <T2lAttrRecord.h>
 
-namespace T2l {
-
-class Component;
+namespace T2l
+{
 
 //=============================================================================
-class CanvasI {
+class AttrRecordCol
 //=============================================================================
+{
 public:
-// <CONSTRUCTION>
-    CanvasI() {}
-    ~CanvasI() {}
-// <METHODS>
-    virtual bool  draw(Component* c) = 0;
+//<CONSTRUCTION>
+    AttrRecordCol();
+//<METHODS>
+    void        recordAdd(const AttrRecord& record) { records_.add(record); }
+    int         recordCount() { return records_.count(); }
+    AttrRecord& recordGet(int index) { return records_.get(index); }
+    AttrRecord* recordGet(const char* value, int index = 0, const char* attrName = "__type__");
+    AttrRecord& recordLast() { return records_.last(); }
 
-    virtual const Box2F& bound()  const   = 0;
-    virtual double       scaleX() const   = 0;
-    virtual double       scaleY() const   = 0;
-    virtual double       scaleS() const   = 0;
-    virtual double       ppm()    const   = 0;
-
-    virtual Point2F mapRealToPaper  (const Point2F& pt) const = 0;
-    virtual Box2F   mapRealToPaper  (const Box2F& pt)   const = 0;
-    virtual Point2F mapPaperToReal  (const Point2F& pt) const = 0;
-    virtual double  mapSymbolicToReal(const double d)    const = 0;
-    virtual Point2F mapSymbolicToReal(const Point2F& pt) const = 0;
+    void load(const char* input);
+    std::string print();
 //=============================================================================
+protected:
+//<DATA>
+    ListClever<AttrRecord> records_;
 };
 
-} // namespace t2l
+}

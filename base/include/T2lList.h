@@ -15,7 +15,7 @@
 //=============================================================================
 #pragma once
 
-#include <QList>
+#include "T2lListClever.h"
 
 namespace T2l {
 
@@ -29,23 +29,23 @@ public:
     virtual ~List() {}
 // <METHODS>
     virtual void add(T* item);
-    virtual int count() const { return items_.size(); }
-    virtual T* get(int index);
+    virtual int count() const { return items_.count(); }
+    virtual T*  get(int index);
     virtual T* const get2(int index) const;
     virtual T* last();
-    virtual void remove( int index) { items_.removeAt(index); }
-    virtual void remove( T* item ) { items_.removeOne(item); }
-    virtual void clean() { items_.clear(); }
+    virtual void removeIndex( int index) { items_.removeIndex(index); }
+    virtual void remove( T* item ) { items_.remove(item); }
+    virtual void clean() { items_.clean(); }
 //=============================================================================
 protected:
 // <DATA>
-    QList<T*> items_;
+    ListClever<T*> items_;
 };
 
 template <class T>
 void List<T>::add(T* item)
 {
-    items_.append(item);
+    items_.add(item);
 }
 
 template <class T>
@@ -53,7 +53,7 @@ T* List<T>::get(int index)
 {
     if (index < 0) return NULL;
     if (index >= count()) return NULL;
-    return items_.at(index);
+    return items_.get(index);
 }
 
 template <class T>
@@ -61,7 +61,7 @@ T* const List<T>::get2(int index) const
 {
     if (index < 0) return NULL;
     if (index >= count()) return NULL;
-    return items_.at(index);
+    return items_.get2(index);
 }
 
 template <class T>

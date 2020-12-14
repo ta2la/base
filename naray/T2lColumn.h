@@ -31,6 +31,7 @@ public:
 
 //<METHODS>
     T&  get(int index) { return data_.at(index); }
+    const T&  get(int index) const { return data_.at(index); }
     int count() const { return data_.size(); }
     double sum() const;
     std::string print();

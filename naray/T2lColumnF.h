@@ -29,7 +29,8 @@ public:
     ColumnF( int size = 0 ) : Column<double>( size ) {}
     virtual ~ColumnF() {}
 //<METHODS>
-    static double diffSq(ColumnF& c1, ColumnF& c2);
+    static double diffSq(const ColumnF& c1, const ColumnF& c2);
+    static double diffSqImportance(const ColumnF& c1, const ColumnF& c2, const ColumnF& importance);
 //=============================================================================
 //<OVERRIDES>
 //<DATA>

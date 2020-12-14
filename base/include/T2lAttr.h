@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2016 Petr Talla. [petr.talla@gmail.com]
+// Copyright (C) 2020 Petr Talla. [petr.talla@gmail.com]
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,40 +13,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-#include <T2lColumnF.h>
-#include <iostream>
+#pragma once
 
-using namespace T2l;
-using namespace std;
+#include <string>
 
-//=============================================================================
-double ColumnF::diffSq(const ColumnF& c1, const ColumnF& c2)
+namespace T2l
 {
-    int count = ColumnF::countCommon(c1, c2);
-
-    double delta = 0;
-
-    for ( int i = 0; i < count; i++ ) {
-        double di = c1.get(i) - c2.get(i);
-        delta += di*di;
-    }
-
-    return delta;
-}
 
 //=============================================================================
-double ColumnF::diffSqImportance(const ColumnF& c1, const ColumnF& c2, const ColumnF& importance)
+class Attr
+//=============================================================================
 {
-    int count = ColumnF::countCommon(c1, c2);
+public:
+//<CONSTRUCTION>
+    Attr(const char* name = "", const char* value = "");
+    static Attr read(const char* nameValue, const char* delimiter = ":");
+//<METHODS>
+    const char* name()  { return name_.c_str(); }
+    const char* value() { return value_.c_str(); }
+    void        valueSet ( const char* value) { value_ = value; }
 
-    double delta = 0;
-
-    for ( int i = 0; i < count; i++ ) {
-        double di = c1.get(i) - c2.get(i);
-        delta += di*di*importance.get(i);
-    }
-
-    return delta;
-}
-
+    std::string print() { return name_ + ": " + value_; }
 //=============================================================================
+protected:
+//<DATA>
+    std::string name_;
+    std::string value_;
+};
+
+} //namespace T2l;

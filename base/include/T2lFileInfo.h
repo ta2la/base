@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2015 Petr Talla. [petr.talla@gmail.com]
+// Copyright (C) 2020 Petr Talla. [petr.talla@gmail.com]
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,35 +15,26 @@
 //=============================================================================
 #pragma once
 
-#include "T2lPoint2.h"
-#include "T2lBox2.h"
+#include <string>
 
 namespace T2l {
 
-class Component;
-
 //=============================================================================
-class CanvasI {
+class FileInfo {
 //=============================================================================
 public:
-// <CONSTRUCTION>
-    CanvasI() {}
-    ~CanvasI() {}
-// <METHODS>
-    virtual bool  draw(Component* c) = 0;
+//<CONSTRUCTION>
+//<METHODS>
+    static std::string normalize(const char* filePath);
 
-    virtual const Box2F& bound()  const   = 0;
-    virtual double       scaleX() const   = 0;
-    virtual double       scaleY() const   = 0;
-    virtual double       scaleS() const   = 0;
-    virtual double       ppm()    const   = 0;
+    static std::string fileName(const char* filePath);
+    static std::string filePath(const char* filePath);
+    static std::string baseName(const char* filePath);
 
-    virtual Point2F mapRealToPaper  (const Point2F& pt) const = 0;
-    virtual Box2F   mapRealToPaper  (const Box2F& pt)   const = 0;
-    virtual Point2F mapPaperToReal  (const Point2F& pt) const = 0;
-    virtual double  mapSymbolicToReal(const double d)    const = 0;
-    virtual Point2F mapSymbolicToReal(const Point2F& pt) const = 0;
+    static bool exists(const char* filePath);
 //=============================================================================
+private:
+    FileInfo();
 };
 
 } // namespace t2l

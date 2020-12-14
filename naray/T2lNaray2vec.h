@@ -35,12 +35,18 @@ public:
     virtual ~Naray2vec() {}
     void valsFromSet(const ColumnF& from) { valsFrom_ = from; }
     void valsToSet(const ColumnF& to)   { valsTo_   = to; }
+
+    void initializeRandom(const ColumnF min, const ColumnF max);
 //<METHODS>
-    Point2I calculateBmatch(ColumnF& c);
+    Point2I calculateBmatch(const ColumnF& c);
+    Point2I calculateBmatch(const ColumnF& cc, const ColumnF& minima, const ColumnF& maxima, const ColumnF& importance);
     static double calculateDistance(const Point2I& p0, const Point2I& p1);
 
     ColumnF& valsFrom() { return valsFrom_; }
     ColumnF& valsTo()   { return valsTo_; }
+
+    static double normalize(double value, double range, double minima, double maxima);
+    static ColumnF normalize(const ColumnF& column, double range, const ColumnF& minima, const ColumnF& maxima);
 //=============================================================================
 //<OVERRIDES>
 //<DATA>

@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2016 Petr Talla. [petr.talla@gmail.com]
+// Copyright (C) 2020 Petr Talla. [petr.talla@gmail.com]
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,40 +13,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //=============================================================================
-#include <T2lColumnF.h>
-#include <iostream>
+#include "T2lColumnFCol_iface.h"
 
 using namespace T2l;
-using namespace std;
 
 //=============================================================================
-double ColumnF::diffSq(const ColumnF& c1, const ColumnF& c2)
+ColumnFCol_iface::~ColumnFCol_iface()
 {
-    int count = ColumnF::countCommon(c1, c2);
-
-    double delta = 0;
-
-    for ( int i = 0; i < count; i++ ) {
-        double di = c1.get(i) - c2.get(i);
-        delta += di*di;
-    }
-
-    return delta;
 }
 
 //=============================================================================
-double ColumnF::diffSqImportance(const ColumnF& c1, const ColumnF& c2, const ColumnF& importance)
+ColumnF ColumnFCol_iface::i_columnFCol_minmax_(bool max)
 {
-    int count = ColumnF::countCommon(c1, c2);
+    if (i_columnFCol_count() == 0) return ColumnF(0);
 
-    double delta = 0;
+    ColumnF result = i_columnFCol_get(0);
 
-    for ( int i = 0; i < count; i++ ) {
-        double di = c1.get(i) - c2.get(i);
-        delta += di*di*importance.get(i);
+    for (int i = 1; i < i_columnFCol_count(); i++) {
+        ColumnF actual = i_columnFCol_get(i);
+
+        for (int ii = 0; ii < result.count(); ii++) {
+            bool doit = false;
+
+            if ( max ) {
+                if ( result.get(ii) < actual.get(ii) ) doit = true;
+            }
+            else {
+                if ( result.get(ii) > actual.get(ii) ) doit = true;
+            }
+
+            if ( doit ) {
+                result.get(ii) = actual.get(ii);
+            }
+        }
     }
 
-    return delta;
+    return result;
 }
 
 //=============================================================================
