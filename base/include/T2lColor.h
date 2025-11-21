@@ -17,8 +17,6 @@
 #pragma once
 
 // base
-#include "T2lTuple.h"
-
 #include <string>
 
 namespace T2l {
