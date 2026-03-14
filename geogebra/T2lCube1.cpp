@@ -41,18 +41,21 @@ bool Cube1::isInside(const Point3F& point)
 }
 
 //=============================================================================
-Point3F Cube1::pointGet(int index)
+Point3F Cube1::pointGet(int index, double shift) const
 {
-    switch(index) {
-    case 0: return pointDelta(Point3F(0,0,0));
-    case 1: return pointDelta(Point3F(1,0,0));
-    case 2: return pointDelta(Point3F(1,1,0));
-    case 3: return pointDelta(Point3F(0,1,0));
+    double l = 1 + shift;
+    double o = -shift;
 
-    case 4: return pointDelta(Point3F(0,0,1));
-    case 5: return pointDelta(Point3F(1,0,1));
-    case 6: return pointDelta(Point3F(1,1,1));
-    case 7: return pointDelta(Point3F(0,1,1));
+    switch(index) {
+    case 0: return pointDelta(Point3F(o,o,o));
+    case 1: return pointDelta(Point3F(l,o,o));
+    case 2: return pointDelta(Point3F(l,l,o));
+    case 3: return pointDelta(Point3F(o,l,o));
+
+    case 4: return pointDelta(Point3F(o,o,l));
+    case 5: return pointDelta(Point3F(l,o,l));
+    case 6: return pointDelta(Point3F(l,l,l));
+    case 7: return pointDelta(Point3F(o,l,l));
     }
 
     assert(0);
@@ -96,6 +99,67 @@ std::array<int, 4> Cube1::faceIndexes(int index)
     }
 
     return { 0, 1, 2, 3};
+}
+
+//=============================================================================
+Grid3 Cube1::faceGrid(int index, double size)
+{
+    Point3F  o { 0, 0, 0};
+    Vector3F u { 1, 0, 0};
+    Vector3F v { 0, 1, 0};
+
+    switch (index)
+    {
+    case 0:
+        o = pointGet(0);
+        u = {0, 1, 0};
+        v = {1, 0, 0};
+        break;
+    case 1:
+        o = pointGet(0);
+        u = {1, 0, 0};
+        v = {0, 0, 1};
+        break;
+    case 2:
+        o = pointGet(1);
+        u = {0, 1, 0};
+        v = {0, 0, 1};
+        break;
+    case 3:
+        o = pointGet(2);
+        u = {-1, 0, 0};
+        v = {0, 0, 1};
+        break;
+    case 4:
+        o = pointGet(3);
+        u = {0, -1, 0};
+        v = {0, 0, 1};
+        break;
+    case 5:
+        o = pointGet(4);
+        u = {1, 0, 0};
+        v = {0, 1, 0};
+        break;
+
+    }
+
+    switch (index)
+    {
+    case 0:
+    case 5:
+
+        break;
+    case 1:
+    case 4:
+
+        break;
+    case 2:
+    case 3:
+
+        break;
+    }
+
+    return Grid3(o, u, v);
 }
 
 //=============================================================================

@@ -16,6 +16,7 @@
 #pragma once
 
 #include "T2lPoint3.h"
+#include "T2lGrid3.h"
 
 #include <utility>
 
@@ -23,23 +24,25 @@ namespace T2l {
 
 class Ray3;
 
-//=============================================================================
 class Cube1 {
-
 //=============================================================================
 public:
 // <CONSTRUCTION>
     Cube1(const Point3I& p3 );
     ~Cube1() {}
 // <METHODS>
-    Point3I& point() { return point_; }
-    Point3F pointLower() const { return Point3F(
+    Point3I& point() { return point_; } //obsolete
+    const Point3I& position() const { return point_; }
+    Point3F  pointLower() const { return Point3F(
             static_cast<double>(point_.x()),
             static_cast<double>(point_.y()),
             static_cast<double>(point_.z()) );
     }
+
+    void               positionSet(const Point3I& p3) { point_ = p3; }
+
     static int         pointCount() { return 8; }
-    Point3F            pointGet(int index);
+    Point3F            pointGet(int index, double shift = 0.0) const;
     static int         verticeCount() { return 12; }
     std::pair<Point3F, Point3F> verticeGet(int index);
     static int         faceCount() { return 6; }
@@ -54,13 +57,12 @@ public:
     }
 
     std::pair<int, double> nearestFace(const Ray3& ray);
+
+    Grid3 faceGrid(int index, double size = 1.0);
 //=============================================================================
 protected:
-
 //<DATA>
     Point3I point_;
-
-    friend class Cmd_draw_cube1;
 };
 
 } // namespace t2l

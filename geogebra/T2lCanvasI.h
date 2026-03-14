@@ -33,10 +33,10 @@ public:
     virtual bool  draw(Element* c) = 0;
     virtual double  width(Element* c) = 0;
 
-    //virtual const Box2F& bound()  const   = 0; //APTA💊
     virtual double       scale() const   = 0;
     virtual double       scaleS() const   = 0;
-    //virtual double       ppm()    const   = 0;
+
+    virtual double cutPlane() const = 0;
 
     virtual Point2F mapRealToPaper  (const Point2F& pt) const = 0;
     virtual Box2F   mapRealToPaper  (const Box2F& pt)   const = 0;
