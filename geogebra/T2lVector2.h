@@ -43,6 +43,7 @@ public:
     void rotateCc(const Angle& angle);
     bool isOnLeftOf( const Vector2<T>& second) { return crossProduct(*this, second) > 0; }
     static Angle angleBetween( const Vector<T>& v0, const Vector<T>& v1 );
+    static Angle angleCcBetween( const Vector2<T>& v0, const Vector2<T>& v1 );
     static double crossProduct( const Vector2<T>& v0, const Vector2<T>& v1 );
     void flipX() { Vector<T,2>::x_[1] = -Vector<T,2>::x_[1]; }
     void flipY() { Vector<T,2>::x_[0] = -Vector<T,2>::x_[0]; }
@@ -121,6 +122,28 @@ Angle Vector2<T>::angleBetween( const Vector<T>& v0, const Vector<T>& v1)
     if (result >= M_PI-10e-12) result = M_PI;
 
     return Angle(result, Angle::UNITS_RAD);
+}
+
+//=============================================================================
+// CCW angle from v0 to v1, normalized to [0, 360)°.
+//
+//   angle < 180°:              angle > 180°:
+//
+//        v1            angle(  *-------> v0
+//       /                       \
+//      /  ) angle                \
+//     /                           \
+//    *-------> v0                  v1
+//
+template<class T>
+Angle Vector2<T>::angleCcBetween( const Vector2<T>& v0, const Vector2<T>& v1 )
+{
+    double a0 = v0.getAngle().get();
+    double a1 = v1.getAngle().get();
+    double diff = a1 - a0;
+    if (diff < 0) diff += 360.0;
+
+    return Angle(diff, Angle::UNITS_DEG);
 }
 
 //=============================================================================
